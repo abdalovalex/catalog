@@ -1,0 +1,46 @@
+AppBundle\Entity\Book:
+    type: entity
+    table: book
+    options:
+        comment: "Книги"
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            options:
+                unsigned: true
+    fields:
+        name:
+            type: string
+            length: 100
+            nullable: false
+            options:
+                comment: "Название книги"
+        publish:
+            columnDefinition: YEAR NOT NULL COMMENT 'Год издания книги'
+        isbn:
+            type: string
+            length: 13
+            nullble: false
+            options:
+                comment: "ISBN"
+        page:
+            type: smallint
+            nullble: false
+            options:
+                unsigned: true
+                comment: "Кол-во страниц"
+        cover:
+            type: string
+            length: 100
+            options:
+                comment: "Обложка"
+    uniqueConstraints:
+        name_publish:
+            columns: name,publish
+        isbn:
+            columns: isbn
+    manyToMany:
+        authors:
+            targetEntity: Author
+            mappedBy: books
