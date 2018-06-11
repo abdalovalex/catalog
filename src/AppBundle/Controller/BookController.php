@@ -12,6 +12,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Book;
 use AppBundle\Form\BookType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,7 +31,7 @@ class BookController extends Controller
     }
 
     /**
-     * Добавление книга
+     * Добавление книги
      *
      * @param Request $request
      */
@@ -52,6 +53,8 @@ class BookController extends Controller
     {
         /** @var Book $bookInfo */
         $bookInfo = $this->getDoctrine()->getRepository('AppBundle:Book')->find($id);
+        if ($bookInfo === null)
+            return $this->redirectToRoute('book_list');
 
         /** @var File $cover */
         $cover = new File($this->getParameter('cover_directory').'/'.$bookInfo->getCover());
@@ -64,6 +67,13 @@ class BookController extends Controller
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
             if (($file = $bookInfo->getCover()) !== null)
             {
+                $fs = new Filesystem();
+                $filePath = $this->getParameter('cover_directory').'/'.$bookInfo->getCover();
+                $fs->remove($filePath);
+                // Если не удалось удалить файл
+                if ($fs->exists($filePath))
+                    return $this->redirectToRoute('book_update', ['id' => $bookInfo->getId()]);
+
                 $fileName = md5(uniqid()).'.'.$file->guessExtension();
                 $file->move($this->getParameter('cover_directory'), $fileName);
                 $bookInfo->setCover($fileName);
@@ -86,10 +96,28 @@ class BookController extends Controller
     /**
      * Удаление книги
      *
-     * @param $id
+     * @param      $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction($id)
     {
+        /** @var Book $bookInfo */
+        $bookInfo = $this->getDoctrine()->getRepository('AppBundle:Book')->find($id);
+        if ($bookInfo !== null)
+        {
+            $fs = new Filesystem();
+            $filePath = $this->getParameter('cover_directory').'/'.$bookInfo->getCover();
+            $fs->remove($filePath);
+            // Если получилось удалить файл
+            if (!$fs->exists($filePath))
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($bookInfo);
+                $em->flush();
+            }
+        }
 
+        return $this->redirectToRoute('book_list');
     }
 }

@@ -14,7 +14,11 @@ book_update:
     path:     /book/update/{id}
     defaults: { _controller: AppBundle:Book:update }
     methods:  [GET, POST]
+    requirements:
+        id: '^[1-9][0-9]*$'
 book_delete:
     path:     /book/delete/{id}
     defaults: { _controller: AppBundle:Book:delete }
     methods:  [GET]
+    requirements:
+        id: '^[1-9][0-9]*$'
