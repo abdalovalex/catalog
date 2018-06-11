@@ -17,10 +17,14 @@ AppBundle\Entity\Book:
             options:
                 comment: 'Название книги'
         publish:
-            columnDefinition: YEAR NOT NULL COMMENT 'Год издания книги'
+            type: smallint
+            nullble: false
+            options:
+                unsigned: true
+                comment: 'Год издания книги'
         isbn:
             type: string
-            length: 13
+            length: 17
             nullble: false
             options:
                 comment: 'ISBN'
@@ -32,6 +36,7 @@ AppBundle\Entity\Book:
                 comment: 'Кол-во страниц'
         cover:
             type: string
+            nullble: true
             length: 100
             options:
                 comment: 'Обложка'
