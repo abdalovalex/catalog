@@ -2,16 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Каталог!{% endblock %}</title>
+        <title>{% block title %}Каталог{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% stylesheets 'bundles/app/css/*' filter='cssrewrite' %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
-            {% endstylesheets %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
 
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        <div class="container">
         {% block body %}{% endblock %}
+        </div>
 
         {% javascripts '@AppBundle/Resources/public/js/jquery-3.3.1.min.js'
                        '@AppBundle/Resources/public/js/bootstrap.min.js' %}

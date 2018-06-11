@@ -1,3 +1,20 @@
-catalog_list:
+home:
     path:     /
     defaults: { _controller: AppBundle:Home:index }
+    methods:  [GET]
+book_list:
+    path:     /book
+    defaults: { _controller: AppBundle:Book:index }
+    methods:  [GET]
+book_add:
+    path:     /book/add
+    defaults: { _controller: AppBundle:Book:add }
+    methods:  [GET, POST]
+book_update:
+    path:     /book/update/{id}
+    defaults: { _controller: AppBundle:Book:update }
+    methods:  [GET, POST]
+book_delete:
+    path:     /book/delete/{id}
+    defaults: { _controller: AppBundle:Book:delete }
+    methods:  [GET]

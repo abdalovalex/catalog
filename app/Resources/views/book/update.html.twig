@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+{% block title %}Спиоск книг{% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-heading">Редактирование книги</div>
+    <div class="panel-body">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        {{ form_row(form._token) }}
+
+        <div class="form-group {% if (form_errors(form.name)) %}has-error{% endif %}">
+            {{ form_label(form.name, '', {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+            <div class="col-md-10">{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}</div>
+            {% if (form_errors(form.name)) %}
+                <div class="col-md-offset-2 col-md-10 error-message">{{ form_errors(form.name) }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group {% if (form_errors(form.publish)) %}has-error{% endif %}">
+            {{ form_label(form.publish, '', {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+            <div class="col-md-10">{{ form_widget(form.publish, {'attr': {'class': 'form-control'}}) }}</div>
+            {% if (form_errors(form.publish)) %}
+                <div class="col-md-offset-2 col-md-10 error-message">{{ form_errors(form.publish) }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group {% if (form_errors(form.isbn)) %}has-error{% endif %}">
+            {{ form_label(form.isbn, '', {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+            <div class="col-md-10">
+                {{ form_widget(form.isbn, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            {% if (form_errors(form.isbn)) %}
+                <div class="col-md-offset-2 col-md-10 error-message">{{ form_errors(form.isbn) }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group {% if (form_errors(form.authors)) %}has-error{% endif %}">
+            {{ form_label(form.authors, '', {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+            <div class="col-md-10">{{ form_widget(form.authors, {'attr': {'class': 'form-control'}}) }}</div>
+            {% if (form_errors(form.authors)) %}
+                <div class="col-md-offset-2 col-md-10 error-message">{{ form_errors(form.authors) }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group {% if (form_errors(form.page)) %}has-error{% endif %}">
+            {{ form_label(form.page, '', {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+            <div class="col-md-10">{{ form_widget(form.page, {'attr': {'class': 'form-control'}}) }}</div>
+            {% if (form_errors(form.page)) %}
+                <div class="col-md-offset-2 col-md-10 error-message">{{ form_errors(form.page) }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group {% if (form_errors(form.cover)) %}has-error{% endif %}">
+            {{ form_label(form.cover, '', {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+            <div class="col-md-10">{{ form_widget(form.cover, {'attr': {'class': 'form-control'}}) }}</div>
+            {% if (form_errors(form.cover)) %}
+                <div class="col-md-offset-2 col-md-10 error-message">{{ form_errors(form.cover) }}</div>
+            {% endif %}
+            <div class="col-md-offset-2 col-md-10" style="margin-top: 20px;"><img src="{{ asset('uploads/cover/' ~ bookInfo.cover) }}" class="img-thumbnail" style="width:110px; height: auto;"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">{{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

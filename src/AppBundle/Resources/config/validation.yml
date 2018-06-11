@@ -1,0 +1,26 @@
+AppBundle\Entity\Book:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [name, publish]
+            message: 'Книга с указаным годом издания уже существует.'
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: isbn
+    properties:
+        name:
+            - Length:
+                min: 1
+                max: 100
+                maxMessage: 'Название книги не должно быть больше 100 символов.'
+        publish:
+            - GreaterThan:
+                value: 0
+                message: 'Год издания не может быть меньше чем 0 год.'
+        isbn:
+            - Isbn:
+                message: 'Значение не соответствует форматам ISBN-10 или ISBN-13.'
+        page:
+            - Type:
+                type: integer
+            - GreaterThan: 0
+        cover:
+            - Image:
+                mimeTypes: ['image/png', 'image/jpeg', 'image/pjpeg']

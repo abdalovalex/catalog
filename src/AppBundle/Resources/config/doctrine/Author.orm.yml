@@ -22,7 +22,4 @@ AppBundle\Entity\Author:
     manyToMany:
         books:
             targetEntity: Book
-            inversedBy: authors
-            joinColumn:
-                name: book_id
-                referencedColumnName: id
+            mappedBy: authors

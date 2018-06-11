@@ -43,4 +43,4 @@ AppBundle\Entity\Book:
     manyToMany:
         authors:
             targetEntity: Author
-            mappedBy: books
+            inversedBy: books
