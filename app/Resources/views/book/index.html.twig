@@ -5,31 +5,39 @@
     <a href="{{ path('book_add') }}" class="btn btn-success" style="margin-bottom: 20px;">Добавить книгу</a>
     <table class="table table-bordered">
         <tr>
-            <th>Название</th>
-            <th>Год</th>
-            <th>ISBN</th>
-            <th>Кол-во страниц</th>
-            <th>Обложка</th>
-            <th>Авторы</th>
+            <th class="col-md-3">Название</th>
+            <th class="col-md-1">Год</th>
+            <th class="col-md-3">ISBN</th>
+            <th class="col-md-3">Авторы</th>
+            <th class="col-md-1">Страниц</th>
+            <th class="col-md-1">Обложка</th>
             <th>Ред.</th>
             <th>Уд.</th>
         </tr>
         {% for book in bookList %}
             <tr>
-                <td>{{ book.getName() }}</td>
+                <td><a href="{{ path('book_view', {'id' : book.getId()}) }}">{{ book.getName() }}</a></td>
                 <td>{{ book.getPublish() }}</td>
                 <td>{{ book.getIsbn() }}</td>
-                <td>{{ book.getPage() }}</td>
-                <td><img src="{{ asset('uploads/cover/' ~ book.cover) }}" class="img-thumbnail" style="width:110px; height: auto;"></td>
                 <td>
                     {% if book.getAuthors() is not null %}
                         {% for author in book.getAuthors().getValues() %}
-                            {{ author.getFio() }} {% if not loop.last %}, {% endif %}
+                            <a href="{{ path('author_update', {'id' : author.getId()}) }}">{{ author.getFioShort() }}</a> {% if not loop.last %}, {% endif %}
                         {% endfor %}
                     {% endif %}
                 </td>
+                <td>{{ book.getPage() }}</td>
+                <td>
+                    {% if book.cover %}
+                        <img src="{{ asset('uploads/cover/' ~ book.cover) }}" class="img-thumbnail" style="width:110px; height: auto;">
+                    {% else %}
+                        {% image '@AppBundle/Resources/public/images/no_cover.png' %}
+                            <img src="{{ asset_url }}" class="img-thumbnail" />
+                        {% endimage %}
+                    {% endif %}
+                </td>
                 <td><a href="{{ path('book_update', {'id' : book.getId()}) }}">Ред.</a></td>
-                <td><a href="{{ path('book_delete', {'id' : book.getId()}) }}">Уд.</a></td>
+                <td><a href="{{ path('book_delete', {'id' : book.getId()}) }}" onclick="return confirm('Вы действительно хотите удалить {{ book.getName() }}?') ?  true : false;">Уд.</a></td>
             </tr>
         {% endfor %}
     </table>

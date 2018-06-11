@@ -10,6 +10,12 @@ book_add:
     path:     /book/add
     defaults: { _controller: AppBundle:Book:add }
     methods:  [GET, POST]
+book_view:
+    path:     /book/view/{id}
+    defaults: { _controller: AppBundle:Book:view }
+    methods:  [GET]
+    requirements:
+        id: '^[1-9][0-9]*$'
 book_update:
     path:     /book/update/{id}
     defaults: { _controller: AppBundle:Book:update }
@@ -19,6 +25,27 @@ book_update:
 book_delete:
     path:     /book/delete/{id}
     defaults: { _controller: AppBundle:Book:delete }
+    methods:  [GET]
+    requirements:
+        id: '^[1-9][0-9]*$'
+
+author_list:
+    path:     /author
+    defaults: { _controller: AppBundle:Author:index }
+    methods:  [GET]
+author_add:
+    path:     /author/add
+    defaults: { _controller: AppBundle:Author:add }
+    methods:  [GET, POST]
+author_update:
+    path:     /author/update/{id}
+    defaults: { _controller: AppBundle:Author:update }
+    methods:  [GET, POST]
+    requirements:
+        id: '^[1-9][0-9]*$'
+author_delete:
+    path:     /author/delete/{id}
+    defaults: { _controller: AppBundle:Author:delete }
     methods:  [GET]
     requirements:
         id: '^[1-9][0-9]*$'

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block title %}Просмотр книги{% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-heading">Просмотр книги</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2 control-label" style="font-weight: 700;">Название</div>
+            <div class="col-md-10">{{ book.getName() }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 control-label" style="font-weight: 700;">Год издания</div>
+            <div class="col-md-10">{{ book.getPublish() }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 control-label" style="font-weight: 700;">ISBN</div>
+            <div class="col-md-10">{{ book.getIsbn() }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 control-label" style="font-weight: 700;">Автор(ы)</div>
+            <div class="col-md-10">
+                {% if book.getAuthors() is not null %}
+                    {% for author in book.getAuthors().getValues() %}
+                        {{ author.getFioShort() }} {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 control-label" style="font-weight: 700;">Кол-во страниц</div>
+            <div class="col-md-10">{{ book.getPage() }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 control-label" style="font-weight: 700;">Обложка</div>
+            <div class="col-md-10">
+                {% if book is defined and book.cover %}
+                    <img src="{{ asset('uploads/cover/' ~ book.cover) }}" class="img-thumbnail" style="width:110px; height: auto;">
+                {% else %}
+                    {% image '@AppBundle/Resources/public/images/no_cover.png' %}
+                        <img src="{{ asset_url }}" class="img-thumbnail" />
+                    {% endimage %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

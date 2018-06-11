@@ -3,3 +3,17 @@
     color: #d9534f;
     padding-top: 5px;
 }
+
+.header h3
+{
+    padding-bottom: 19px;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+}
+
+body
+{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

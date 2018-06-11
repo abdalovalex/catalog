@@ -1,3 +1,15 @@
+AppBundle\Entity\Author:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [fio]
+            message: 'Автор уже заведен в каталоге.'
+    properties:
+        fio:
+            - Length:
+                min: 1
+                max: 100
+                maxMessage: 'ФИО автора не должно содержать больше 100 символов.'
+
 AppBundle\Entity\Book:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
@@ -9,7 +21,7 @@ AppBundle\Entity\Book:
             - Length:
                 min: 1
                 max: 100
-                maxMessage: 'Название книги не должно быть больше 100 символов.'
+                maxMessage: 'Название книги не должно содержать больше 100 символов.'
         publish:
             - GreaterThan:
                 value: 0

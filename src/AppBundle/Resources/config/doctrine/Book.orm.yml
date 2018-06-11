@@ -2,7 +2,7 @@ AppBundle\Entity\Book:
     type: entity
     table: book
     options:
-        comment: "Книги"
+        comment: 'Книги'
     id:
         id:
             type: integer
@@ -15,7 +15,7 @@ AppBundle\Entity\Book:
             length: 100
             nullable: false
             options:
-                comment: "Название книги"
+                comment: 'Название книги'
         publish:
             columnDefinition: YEAR NOT NULL COMMENT 'Год издания книги'
         isbn:
@@ -23,18 +23,18 @@ AppBundle\Entity\Book:
             length: 13
             nullble: false
             options:
-                comment: "ISBN"
+                comment: 'ISBN'
         page:
             type: smallint
             nullble: false
             options:
                 unsigned: true
-                comment: "Кол-во страниц"
+                comment: 'Кол-во страниц'
         cover:
             type: string
             length: 100
             options:
-                comment: "Обложка"
+                comment: 'Обложка'
     uniqueConstraints:
         name_publish:
             columns: name,publish

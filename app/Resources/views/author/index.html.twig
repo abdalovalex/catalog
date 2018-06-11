@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block title %}Авторы{% endblock %}
+
+{% block body %}
+    <a href="{{ path('author_add') }}" class="btn btn-success" style="margin-bottom: 20px;">Добавить автора</a>
+    <table class="table table-bordered">
+        <tr>
+            <th class="col-md-4">ФИО</th>
+            <th class="col-md-8">Книги</th>
+            <th>Ред.</th>
+            <th>Уд.</th>
+        </tr>
+        {% for author in authorList %}
+            <tr>
+                <td>{{ author.getFioShort() }}</td>
+                <td>
+                    {% if author.getBooks() is not null %}
+                        {% for book in author.getBooks().getValues() %}
+                            <a href="{{ path('book_update', {'id' : book.getId()}) }}">{{ book.getName() }}</a> {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td><a href="{{ path('author_update', {'id' : author.getId()}) }}">Ред.</a></td>
+                <td><a href="{{ path('author_delete', {'id' : author.getId()}) }}" onclick="return confirm('Вы действительно хотите удалить {{ author.getFioShort() }}?') ?  true : false;">Уд.</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

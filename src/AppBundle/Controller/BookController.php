@@ -8,7 +8,6 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\Book;
 use AppBundle\Form\BookType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -34,10 +33,48 @@ class BookController extends Controller
      * Добавление книги
      *
      * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addAction(Request $request)
     {
+        $book = new Book();
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() and $form->isValid())
+        {
+            /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            if (($file = $book->getCover()) !== null)
+            {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                $file->move($this->getParameter('cover_directory'), $fileName);
+                $book->setCover($fileName);
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($book);
+            $em->flush();
+
+            return $this->redirectToRoute('book_update', ['id' => $book->getId()]);
+        }
+
+        return $this->render('book/add.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Просмотр книги
+     *
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewAction($id)
+    {
+        /** @var Book $book */
+        $book = $this->getDoctrine()->getRepository('AppBundle:Book')->find($id);
+
+        return $this->render('book/view.html.twig', ['book' => $book]);
     }
 
     /**
@@ -51,46 +88,51 @@ class BookController extends Controller
      */
     public function updateAction($id, Request $request)
     {
-        /** @var Book $bookInfo */
-        $bookInfo = $this->getDoctrine()->getRepository('AppBundle:Book')->find($id);
-        if ($bookInfo === null)
+        /** @var Book $book */
+        $book = $this->getDoctrine()->getRepository('AppBundle:Book')->find($id);
+        if ($book === null)
             return $this->redirectToRoute('book_list');
 
-        /** @var File $cover */
-        $cover = new File($this->getParameter('cover_directory').'/'.$bookInfo->getCover());
-        $bookInfo->setCover($cover);
-
-        $form = $this->createForm(BookType::class, $bookInfo);
+        if ($book->getCover())
+        {
+            /** @var File $cover */
+            $cover = new File($this->getParameter('cover_directory').'/'.$book->getCover());
+            $book->setCover($cover);
+        }
+        $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
         if ($form->isSubmitted() and $form->isValid())
         {
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            if (($file = $bookInfo->getCover()) !== null)
+            if (($file = $book->getCover()) !== null)
             {
+                // Если уже был загруженный файл
                 $fs = new Filesystem();
-                $filePath = $this->getParameter('cover_directory').'/'.$bookInfo->getCover();
+                $filePath = $this->getParameter('cover_directory').'/'.$book->getCover();
                 $fs->remove($filePath);
                 // Если не удалось удалить файл
                 if ($fs->exists($filePath))
-                    return $this->redirectToRoute('book_update', ['id' => $bookInfo->getId()]);
+                    return $this->redirectToRoute('book_update', ['id' => $book->getId()]);
 
                 $fileName = md5(uniqid()).'.'.$file->guessExtension();
                 $file->move($this->getParameter('cover_directory'), $fileName);
-                $bookInfo->setCover($fileName);
+                $book->setCover($fileName);
             }
-            else
-                $bookInfo->setCover($cover->getFilename());
+            elseif (isset($cover))
+                $book->setCover($cover->getFilename());
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($bookInfo);
+            $em->persist($book);
             $em->flush();
 
-            return $this->redirectToRoute('book_update', ['id' => $bookInfo->getId()]);
+            return $this->redirectToRoute('book_update', ['id' => $book->getId()]);
         }
-        $bookInfo->setCover($cover->getFilename());
 
-        return $this->render('book/update.html.twig', ['bookInfo' => $bookInfo,
-                                                       'form'     => $form->createView()]);
+        if (isset($cover))
+            $book->setCover($cover->getFilename());
+
+        return $this->render('book/update.html.twig', ['book' => $book,
+                                                       'form' => $form->createView()]);
     }
 
     /**
@@ -102,18 +144,18 @@ class BookController extends Controller
      */
     public function deleteAction($id)
     {
-        /** @var Book $bookInfo */
-        $bookInfo = $this->getDoctrine()->getRepository('AppBundle:Book')->find($id);
-        if ($bookInfo !== null)
+        /** @var Book $book */
+        $book = $this->getDoctrine()->getRepository('AppBundle:Book')->find($id);
+        if ($book !== null)
         {
             $fs = new Filesystem();
-            $filePath = $this->getParameter('cover_directory').'/'.$bookInfo->getCover();
+            $filePath = $this->getParameter('cover_directory').'/'.$book->getCover();
             $fs->remove($filePath);
             // Если получилось удалить файл
             if (!$fs->exists($filePath))
             {
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($bookInfo);
+                $em->remove($book);
                 $em->flush();
             }
         }

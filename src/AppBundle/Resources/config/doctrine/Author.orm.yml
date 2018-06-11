@@ -2,7 +2,7 @@ AppBundle\Entity\Author:
     type: entity
     table: author
     options:
-        comment: "Авторы"
+        comment: 'Авторы'
     id:
         id:
             type: integer
@@ -15,7 +15,7 @@ AppBundle\Entity\Author:
             length: 100
             nullable: false
             options:
-                comment: "ФИО автора"
+                comment: 'ФИО автора'
     uniqueConstraints:
         fio:
             columns: fio
